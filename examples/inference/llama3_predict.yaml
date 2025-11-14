@@ -1,0 +1,31 @@
+### model
+model_name_or_path: XXX # fill in the path to your model
+
+### method
+stage: sft
+finetuning_type: full
+
+### dataset
+eval_dataset: gsm8k_test   # ["gsm8k_test", "openscience_test"]
+dataset_dir: data
+template: llama3
+cutoff_len: 4096
+max_samples: null
+overwrite_cache: true
+preprocessing_num_workers: 8
+
+### output
+output_dir: saves/llama3-8b/full/gsm8k_predict # fill in the path to your output
+overwrite_output_dir: true
+
+### eval / generation
+per_device_eval_batch_size: 16 # adjust according to your GPU memory
+predict_with_generate: true
+ddp_timeout: 180000000
+
+# 关键的生成参数
+max_new_tokens: 512
+temperature: 0.0
+do_sample: false
+top_p: 1.0
+top_k: 50
