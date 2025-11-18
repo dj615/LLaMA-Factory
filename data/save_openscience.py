@@ -1,4 +1,4 @@
-from datasets import load_dataset
+from datasets import load_dataset 
 import os
 import json
 import re
@@ -16,20 +16,25 @@ def extract_boxed(answer: str):
 dataset = load_dataset("nvidia/OpenScienceReasoning-2", split="train")
 
 # 2. 输出路径
-train_path = "/root/workspace/data/train/openscience.jsonl"
-test_path = "/root/workspace/data/test/openscience.jsonl"
+train_path = "data/train/openscience.jsonl"
+test_path = "data/test/openscience.jsonl"
 
-os.makedirs("/root/workspace/data/train", exist_ok=True)
-os.makedirs("/root/workspace/data/test", exist_ok=True)
+os.makedirs("data/train", exist_ok=True)
+os.makedirs("data/test", exist_ok=True)
 
-# 3. 写入 train（前5000条）
+# 3. 选取子集
+train_dataset = dataset.select(range(0, 5000))
+test_dataset  = dataset.select(range(5000, 6000))
+
+# 4. 写入 train（前5000条，原样写出）
 with open(train_path, "w", encoding="utf-8") as f_train:
-    for item in dataset[:5000]:
+    for item in train_dataset:
+        # item 是 dict：{"input": ..., "output": ..., "expected_answer": ...}
         f_train.write(json.dumps(item, ensure_ascii=False) + "\n")
 
-# 4. 写入 test（5000~6000，增加 groundtruth）
+# 5. 写入 test（5000~6000，增加 groundtruth）
 with open(test_path, "w", encoding="utf-8") as f_test:
-    for item in dataset[5000:6000]:
+    for item in test_dataset:
         new_item = {
             "input": item["input"],
             "output": item["output"],

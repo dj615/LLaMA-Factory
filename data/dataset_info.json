@@ -1,34 +1,30 @@
 {
   "gsm8k_train": {
-    "file_name": "/root/workspace/data/train/gsm8k.jsonl",
+    "file_name": "train/gsm8k.jsonl",
     "columns": {
-      "instruction": "question",
-      "input": "",
-      "output": "answer"
+      "prompt": "question",
+      "response": "answer"
     }
   },
   "openscience_train": {
-    "file_name": "/root/workspace/data/train/openscience.jsonl",
+    "file_name": "train/openscience.jsonl",
     "columns": {
-      "instruction": "input",
-      "input": "",
-      "output": "output"
+      "prompt": "input",
+      "response": "output"
     }
   },
   "gsm8k_test": {
-    "file_name": "/root/workspace/data/test/gsm8k.jsonl",
+    "file_name": "test/gsm8k.jsonl",
     "columns": {
-      "instruction": "question",
-      "input": "",
-      "output": "answer"
+      "prompt": "question",
+      "response": "answer"
     }
   },
   "openscience_test": {
-    "file_name": "/root/workspace/data/test/openscience.jsonl",
+    "file_name": "test/openscience.jsonl",
     "columns": {
-      "instruction": "input",
-      "input": "",
-      "output": "output"
+      "prompt": "input",
+      "response": "output"
     }
   },
   "identity": {
@@ -204,7 +200,7 @@
     "hf_hub_url": "TIGER-Lab/MathInstruct",
     "ms_hub_url": "AI-ModelScope/MathInstruct",
     "columns": {
-      "prompt": "instruction",
+      "prompt": "prompt",
       "response": "output"
     }
   },
@@ -327,7 +323,7 @@
     }
   },
   "stem_zh": {
-    "hf_hub_url": "hfl/stem_zh_instruction"
+    "hf_hub_url": "hfl/stem_zh_prompt"
   },
   "ruozhiba_gpt4": {
     "hf_hub_url": "hfl/ruozhiba_gpt4_turbo"
@@ -343,7 +339,7 @@
   "magpie_ultra": {
     "hf_hub_url": "argilla/magpie-ultra-v0.1",
     "columns": {
-      "prompt": "instruction",
+      "prompt": "prompt",
       "response": "response"
     }
   },
@@ -550,7 +546,7 @@
     "ms_hub_url": "llamafactory/ultrafeedback_binarized",
     "ranking": true,
     "columns": {
-      "prompt": "instruction",
+      "prompt": "prompt",
       "chosen": "chosen",
       "rejected": "rejected"
     }
