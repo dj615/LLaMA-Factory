@@ -1,0 +1,31 @@
+### model
+model_name_or_path: /root/workspace/checkpoints/llama3_8b_openscience_1 # fill in the path to your model
+
+### method
+stage: sft
+finetuning_type: full
+
+### dataset
+eval_dataset: openscience_test   # ["openscience_test", "openscience_test"]
+dataset_dir: data
+template: llama3
+cutoff_len: 4096
+max_samples: null
+overwrite_cache: true
+preprocessing_num_workers: 8
+
+### output
+output_dir: /root/workspace/data/predictions/openscience_predict_1 # fill in the path to your output
+overwrite_output_dir: true
+
+### eval / generation
+per_device_eval_batch_size: 4 # adjust according to your GPU memory
+predict_with_generate: true
+ddp_timeout: 180000000
+
+# 关键的生成参数
+max_new_tokens: 512
+temperature: 0.0
+do_sample: false
+top_p: 1.0
+top_k: 50

@@ -14,7 +14,7 @@ def extract_groundtruth(answer: str):
 train_set = load_dataset("gsm8k", "main", split="train")
 test_set = load_dataset("gsm8k", "main", split="test")
 
-train_dir = "data/train"
+train_dir = "/root/workspace/data/train"
 train_file = os.path.join(train_dir, "gsm8k.jsonl")
 os.makedirs(train_dir, exist_ok=True)
 
@@ -24,7 +24,7 @@ with open(train_file, "w", encoding="utf-8") as f:
 
 print(f"Saved HF gsm8k train to {train_file}")
 
-test_dir = "data/test"
+test_dir = "/root/workspace/data/test"
 test_file = os.path.join(test_dir, "gsm8k.jsonl")
 os.makedirs(test_dir, exist_ok=True)
 

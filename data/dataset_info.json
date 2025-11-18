@@ -1,6 +1,6 @@
 {
   "gsm8k_train": {
-    "file_name": "train/gsm8k.jsonl",
+    "file_name": "/root/workspace/data/train/gsm8k.jsonl",
     "columns": {
       "instruction": "question",
       "input": "",
@@ -8,7 +8,7 @@
     }
   },
   "openscience_train": {
-    "file_name": "train/openscience.jsonl",
+    "file_name": "/root/workspace/data/train/openscience.jsonl",
     "columns": {
       "instruction": "input",
       "input": "",
@@ -16,7 +16,7 @@
     }
   },
   "gsm8k_test": {
-    "file_name": "test/gsm8k.jsonl",
+    "file_name": "/root/workspace/data/test/gsm8k.jsonl",
     "columns": {
       "instruction": "question",
       "input": "",
@@ -24,7 +24,7 @@
     }
   },
   "openscience_test": {
-    "file_name": "test/openscience.jsonl",
+    "file_name": "/root/workspace/data/test/openscience.jsonl",
     "columns": {
       "instruction": "input",
       "input": "",

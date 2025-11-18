@@ -6,10 +6,10 @@ trust_remote_code: true
 stage: sft
 do_train: true
 finetuning_type: full
-deepspeed: examples/deepspeed/ds_z3_config.json  # choices: [ds_z0_config.json, ds_z2_config.json, ds_z3_config.json]
+deepspeed: examples/deepspeed/ds_z2_config.json  # choices: [ds_z0_config.json, ds_z2_config.json, ds_z3_config.json]
 
 ### dataset
-dataset: gsm8k_train
+dataset: openscience_train
 template: llama3
 cutoff_len: 4096
 max_samples: 1000000
@@ -18,7 +18,7 @@ preprocessing_num_workers: 16
 dataloader_num_workers: 4
 
 ### output
-output_dir: saves/llama3-8b/gsm8k
+output_dir: /root/workspace/checkpoints/llama3_8b_openscience_2
 logging_steps: 5
 save_steps: 500
 plot_loss: true
@@ -27,8 +27,8 @@ save_only_model: false
 report_to: wandb  # choices: [none, wandb, tensorboard, swanlab, mlflow]
 
 ### train
-per_device_train_batch_size: 1
-gradient_accumulation_steps: 2
+per_device_train_batch_size: 2
+gradient_accumulation_steps: 8
 learning_rate: 5.0e-5
 num_train_epochs: 5.0
 lr_scheduler_type: linear

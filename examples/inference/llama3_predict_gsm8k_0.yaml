@@ -1,5 +1,5 @@
 ### model
-model_name_or_path: XXX # fill in the path to your model
+model_name_or_path: /root/workspace/checkpoints/llama3_8b_gsm8k_0 # fill in the path to your model
 
 ### method
 stage: sft
@@ -15,7 +15,7 @@ overwrite_cache: true
 preprocessing_num_workers: 8
 
 ### output
-output_dir: saves/llama3-8b/full/gsm8k_predict # fill in the path to your output
+output_dir: /root/workspace/data/predictions/gsm8k_predict_0 # fill in the path to your output
 overwrite_output_dir: true
 
 ### eval / generation

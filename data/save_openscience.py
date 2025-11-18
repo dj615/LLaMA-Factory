@@ -13,14 +13,14 @@ def extract_boxed(answer: str):
 
 
 # 1. 加载 HuggingFace 数据
-dataset = load_dataset("nvidia/openscience", split="train")
+dataset = load_dataset("nvidia/OpenScienceReasoning-2", split="train")
 
 # 2. 输出路径
-train_path = "data/train/openscience.jsonl"
-test_path = "data/test/openscience.jsonl"
+train_path = "/root/workspace/data/train/openscience.jsonl"
+test_path = "/root/workspace/data/test/openscience.jsonl"
 
-os.makedirs("data/train", exist_ok=True)
-os.makedirs("data/test", exist_ok=True)
+os.makedirs("/root/workspace/data/train", exist_ok=True)
+os.makedirs("/root/workspace/data/test", exist_ok=True)
 
 # 3. 写入 train（前5000条）
 with open(train_path, "w", encoding="utf-8") as f_train:
