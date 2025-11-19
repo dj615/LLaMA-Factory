@@ -24,7 +24,7 @@ predict_with_generate: true
 ddp_timeout: 180000000
 
 # 关键的生成参数
-max_new_tokens: 512
+max_new_tokens: 5120
 temperature: 0.0
 do_sample: false
 top_p: 1.0
