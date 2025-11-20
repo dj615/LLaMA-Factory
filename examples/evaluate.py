@@ -7,9 +7,15 @@ import argparse
 def parse_args():
     parser = argparse.ArgumentParser()
     parser.add_argument("--task", type=str, required=True, choices=["gsm8k", "openscience"])
-    parser.add_argument("--pred_file", type=str, required=True,
-                        help="模型预测结果文件（json 或 jsonl）")
+    parser.add_argument("--pred_file", type=str, required=True, help="模型预测结果文件（json 或 jsonl），包含 prompt/predict/label")
     return parser.parse_args()
+
+
+def norm(x: str):
+    """轻微 normalization"""
+    if x is None:
+        return None
+    return x.strip().lower()
 
 
 def extract_after_hashes(text):
@@ -22,15 +28,22 @@ def extract_after_hashes(text):
 
 
 def extract_boxed(text):
-    """用于 OpenScience：提取 \\boxed{...}"""
+    """用于 OpenScience：提取 \boxed{...}（注意不是 \\boxed）"""
     if not isinstance(text, str):
         return None
     m = re.search(r"\\boxed\{(.+?)\}", text)
     return m.group(1).strip() if m else None
 
 
+def extract_answer(text, task):
+    """自动按任务提取答案"""
+    if task == "gsm8k":
+        return extract_after_hashes(text)
+    else:
+        return extract_boxed(text)
+
+
 def load_jsonl(path):
-    """读取 jsonl 文件为列表"""
     out = []
     with open(path, "r", encoding="utf-8") as f:
         for line in f:
@@ -41,68 +54,48 @@ def load_jsonl(path):
 def main():
     args = parse_args()
     task = args.task
-
-    # 自动决定 groundtruth 文件
-    gt_file = f"data/test/{task}.jsonl"
-    if not os.path.exists(gt_file):
-        raise FileNotFoundError(f"groundtruth 文件不存在: {gt_file}")
-
-    print(f"Using groundtruth file: {gt_file}")
-
-    # 1. 使用传入的 pred_file，不再搜索
     pred_path = args.pred_file
+
     if not os.path.exists(pred_path):
         raise FileNotFoundError(f"预测文件不存在: {pred_path}")
     print(f"Using prediction file: {pred_path}")
 
-    # 2. 读取 prediction
+    # 读取 prediction 文件
     if pred_path.endswith(".jsonl"):
-        preds = load_jsonl(pred_path)
+        data = load_jsonl(pred_path)
     else:
-        preds = json.load(open(pred_path, "r", encoding="utf-8"))
-        if isinstance(preds, dict) and "predictions" in preds:
-            preds = preds["predictions"]
+        data = json.load(open(pred_path, "r", encoding="utf-8"))
 
-    # 3. 提取预测答案
-    model_answers = []
-    for p in preds:
-        if isinstance(p, dict):
-            text = p.get("prediction") or p.get("text") or p.get("output") or str(p)
-        else:
-            text = str(p)
+    print(f"Loaded {len(data)} records\n")
 
-        if task == "gsm8k":
-            ans = extract_after_hashes(text)
-        else:  # openscience
-            ans = extract_boxed(text)
-
-        model_answers.append(ans)
-
-    print(f"Loaded {len(model_answers)} predicted answers.")
-
-    # 4. 加载 groundtruth
-    gt_data = load_jsonl(gt_file)
-    groundtruths = [item["groundtruth"] for item in gt_data]
-    print(f"Loaded {len(groundtruths)} groundtruth answers.")
-
-    # 5. 对齐
-    n = min(len(model_answers), len(groundtruths))
-    print(f"Evaluating first {n} samples...")
-
-    # 6. 计算 accuracy
     correct = 0
-    for i in range(n):
-        pred = model_answers[i]
-        gt = str(groundtruths[i]).strip()
+    total = 0
 
-        if pred is None:
+    for item in data:
+        predict_raw = item.get("predict", "")
+        label_raw = item.get("label", "")
+
+        # 提取答案
+        pred_ans = extract_answer(predict_raw, task)
+        gt_ans = extract_answer(label_raw, task)
+
+        # 如果 gt 没提取到，直接用 label 原文
+        if gt_ans is None:
+            gt_ans = str(label_raw).strip()
+
+        pred_ans = norm(pred_ans)
+        gt_ans = norm(gt_ans)
+
+        total += 1
+
+        if pred_ans is None:  # predict 无法提取 → 判错
             continue
 
-        if pred.strip() == gt:
+        if pred_ans == gt_ans:
             correct += 1
 
-    acc = correct / n if n > 0 else 0
-    print(f"\nAccuracy: {acc:.4f}  ({correct}/{n})")
+    acc = correct / total if total > 0 else 0
+    print(f"Accuracy: {acc:.4f}  ({correct}/{total})")
 
 
 if __name__ == "__main__":
